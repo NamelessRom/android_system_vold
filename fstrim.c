@@ -142,12 +142,14 @@ int fstrim_filesystems(void)
      */
     ret = pthread_create(&t, NULL, do_fstrim_filesystems, NULL);
     if (ret) {
+        release_wake_lock(FSTRIM_WAKELOCK);
         SLOGE("Cannot create thread to do fstrim");
         return ret;
     }
 
     ret = pthread_detach(t);
     if (ret) {
+        release_wake_lock(FSTRIM_WAKELOCK);
         SLOGE("Cannot detach thread doing fstrim");
         return ret;
     }
